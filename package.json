@@ -1,6 +1,10 @@
 {
   "name": "strongmind",
   "version": "0.1.0",
+  "engines": {
+    "npm": " 8.19.4",
+    "node": "16.20.1"
+  },
   "main": "index.js",
   "scripts": {
     "bootstrap": "node -e \"bootstrap=require('./bootstrap'); bootstrap()\"",

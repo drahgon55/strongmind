@@ -1,0 +1,31 @@
+node_modules
+*.log
+*.zip
+*.tmp
+
+
+#hidden files
+.DS_STORE
+.jflintrc
+
+
+localOnly
+tests
+config.json
+configTest.json
+clientConfig.json
+gcloud_key.json
+devMerge.sh
+devJohnMerge.sh
+build.info
+version.txt
+
+# test results
+test-reports.xml
+mocha.json
+
+# dev
+/coverage
+
+#helm
+charts

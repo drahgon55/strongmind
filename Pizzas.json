@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Pepperoni",
+    "toppings": [
+      "pepperoni"
+    ]
+  },
+  {
+    "name": "Pepperoni Mushroom",
+    "toppings": [
+      "pepperoni",
+      "mushroom"
+    ]
+  }
+]

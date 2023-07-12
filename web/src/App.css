@@ -1,0 +1,151 @@
+.Add {
+  position: absolute !important;
+  bottom: 40px;
+  right: 50px;
+
+}
+
+.AddDialog {
+  /* width: 800px !important; */
+  background-color: #eeeeee;
+  color: #000000 !important;
+  margin: 0px 70px 0px 10px;
+}
+
+.AddDialogMain {
+  /* width: 800px !important; */
+  color: #000000 !important;
+  margin: 0px 50px 0px 5px;
+}
+
+[aria-labelledby="add-vehicle"] {
+  background-color: #eeeeee !important;
+}
+
+.App {
+  /* text-align: center; */
+}
+
+Body {
+  overflow: hidden;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 125px;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+div.AddDialog > div.MuiTextField-root {
+  display: block;
+  margin: 20px 0 20px 0;
+  background-color: #eeeeee;
+}
+
+div.AddInput >  label.MuiFormLabel-root{
+  color: #111111 !important;
+}
+
+.Empty {
+  margin-left: 50vw;
+  margin-top: calc(calc(100vh - 125px)/2);
+}
+
+.Header {
+  background-color: #6234eb;
+  color: #eeeeee !important;
+}
+
+.Hidden {
+  display: none
+}
+
+.ListItem {
+  border-bottom: 1px solid darkgray !important;
+}
+
+.MuiFormLabel-root {
+  color: #ffffff !important;
+}
+
+.MuiTextField-root {
+  background-color: #aaaaaa;
+}
+
+.TextBox {
+  /* margin: 25px !important; */
+  margin-left: 20px !important;
+  margin-top: 34px !important;
+}
+
+#makeItem {
+  /* margin: 25px !important; */
+  margin-left: 0px !important;
+}
+
+.TextBoxContainer {
+  /* margin: 25px !important; */
+  margin-left: 150px !important;
+}
+
+.Main {
+  background-color: #cccccc;
+  height: 100vh;
+  width: 100vw;
+}
+
+.List {
+  width: 100vw;
+  height: 100vh;
+}
+
+.Whole {
+  /* black */
+  background-color: #000000;
+
+
+}
+
+.Year {
+  margin-right: 100px;
+  font-size: 18px;
+
+}
+
+.test {
+  width: 500px;
+  height: 800px;
+
+}
+
+.test2 {
+  width: 100vw;
+  height: 100vh;
+
+}
+
+.MuiDialog-paper {
+  overflow-y: visible !important;
+}

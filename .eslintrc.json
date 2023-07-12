@@ -1,0 +1,57 @@
+{
+    "env": {
+        "node": true,
+        "mocha": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+		"brace-style": "error",
+		"curly": "error",
+		"dot-location": ["error", "property"],
+		"dot-notation": "error",
+		"eqeqeq": "error",
+		"global-require": "error",
+		"handle-callback-err": "error",
+		"indent": ["error", "tab"],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+		"no-else-return": "error",
+		"no-eval": "error",
+    "no-console": "off",
+		"no-global-assign": "error",
+		"no-irregular-whitespace": [
+			"error",
+			{ "skipComments": true }
+		],
+		"no-nested-ternary": "error",
+		"no-new-require": "error",
+		"no-path-concat": "error",
+		"no-self-compare": "error",
+		"no-sync": "error",
+		"no-template-curly-in-string": "error",
+		"no-ternary": "error",
+		"no-throw-literal": "error",
+		"no-unused-vars": [
+			"error",
+			{ "args": "none" }
+		],
+		"no-var": "error",
+		"one-var": ["error", "never"],
+        "quotes": [
+            "error",
+            "double"
+        ],
+		"quote-props": ["error", "as-needed"],
+        "semi": [
+            "error",
+            "never"
+        ],
+		"strict": [
+			"error",
+			"global"
+		]
+    }
+}

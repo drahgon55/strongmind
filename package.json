@@ -1,0 +1,44 @@
+{
+  "name": "strongmind",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "node -e \"bootstrap=require('./bootstrap'); bootstrap()\"",
+    "build": "cd web&&npm install --force&&npm run build",
+    "buildstart": "cd web&&npm install --force&&npm run build&&cd ..&&node index",
+    "start": "node index",
+    "test": "npx mocha --bail --recursive test/",
+    "testPure": "mocha --bail --recursive test/"
+  },
+  "author": "John-Albert Absalon",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "bson": "^4.7.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongodb": "^5.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jshint": "^2.13.6",
+    "mocha": "^10.2.0",
+    "nock": "^13.3.1",
+    "node-mocks-http": "^1.12.2",
+    "sinon": "^4.5.0",
+    "supertest": "^3.4.2"
+  },
+  "strongmind": {
+    "apiVersion": "1",
+    "host": "0.0.0.0",
+    "port": 3001,
+    "loggerMaxBodyLength": 100
+  },
+  "jshintConfig": {
+    "asi": true,
+    "esversion": 6,
+    "node": true,
+    "varstmt": true,
+    "unused": true,
+    "validthis": true
+  }
+}

@@ -5,8 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { getPizzas, addPizza, deletePizza} from "./services/PizzaService";
-import { getToppings, addTopping, deleteTopping} from "./services/ToppingService";
+import { getPizzas, addPizza, deletePizza, updatePizza} from "./services/PizzaService";
+import { getToppings, addTopping, deleteTopping, updateTopping} from "./services/ToppingService";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer  from "react-virtualized-auto-sizer";
 // import { AutoSizer } from 'react-virtualized'
@@ -88,7 +88,7 @@ function SimpleDialogTopping(props) {
         <Dialog className="AddDialogMain" onClose={onClose} aria-labelledby="add-topping" open={open}>
             <DialogTitle id="add-pizza" className="Header" >Add a new Topping</DialogTitle>
             <div className="AddDialog" >
-                <TextField className="AddInput" id="nameToppingAdd" label="Name" variant="filled" margin="none" size="small"/>
+                <TextField className="AddToppingInput" id="nameToppingAdd" label="Name" variant="filled" margin="none" size="small"/>
             </div>
             <DialogActions>
               <Button onClick={onClose} color="primary">
@@ -100,6 +100,59 @@ function SimpleDialogTopping(props) {
             </DialogActions>
         </Dialog>
     );
+}
+
+//TODO: make this reusable
+function SimpleDialogEditTopping(props) {
+    const { open, onClose, onAdd } = props;
+
+    return (
+        <Dialog className="AddDialogMain" onClose={onClose} aria-labelledby="edit-topping" open={open}>
+            <DialogTitle id="edit-pizza" className="Header" >Edit Topping</DialogTitle>
+            <div className="AddDialog" >
+                <TextField className="editToppingInput" id="nameToppingEdit" label="Name" variant="filled" margin="none" size="small"/>
+            </div>
+            <DialogActions>
+              <Button onClick={onClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={onAdd} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
+
+//TODO: make this reusable
+function SimpleDialogEditPizza(props) {
+    const { open, options, selectedValues, onClose, onAdd, onRemoveSelect } = props;
+
+    return (
+        <Dialog className="AddDialogMain" onClose={onClose} aria-labelledby="edit-pizza" open={open}>
+            <DialogTitle id="edit-pizza" className="Header" >Edit Pizza</DialogTitle>
+            <div className="AddDialog" >
+                <TextField className="editPizzaInput" id="namePizzaEdit" label="Name" variant="filled" margin="none" size="small"/>
+                <Multiselect
+                    isObject={false}
+                    onKeyPressFn={function noRefCheck(){}}
+                    onRemove={onRemoveSelect}
+                    onSearch={function noRefCheck(){}}
+                    onSelect={onRemoveSelect}
+                    options={options}
+                    // selectedValues={selectedValues}
+                />
+            </div>
+            <DialogActions>
+              <Button onClick={onClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={onAdd} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+        </Dialog>
+    )
 }
 
 function CustomTabPanel(props) {
@@ -138,15 +191,17 @@ let flag = false;
 class App extends Component {
     state = {
         open: false,
+        openEdit: false,
         openToppingAdd: false,
+        openToppingEdit: false,
         snack: {open: false, message: "", severity: "info"},
         // pizzas: [{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza", toppings: ["example"]},{name: "examplePizza10", toppings: ["example"]}],
         pizzas: [],
         // toppings: ["example"],
         toppings: [],
         selectedToppings: [],
-        value: 0
-       
+        value: 0,
+        updateId: -1
     }
 
     
@@ -222,7 +277,16 @@ class App extends Component {
             }
 
             return
+        } 
+
+        if (this.state.value === 0) {
+            this.setState({updateId: i, openEdit: true}) 
+        } else {
+            this.setState({updateId: i, openToppingEdit: true}) 
         }
+        
+
+        return
     }
 
     addButtonClickHandler = (e) => {
@@ -261,6 +325,36 @@ class App extends Component {
         this.setState({open: false})
     }
 
+    updatePizza = (e) => {
+        const name = document.getElementById("namePizzaEdit").value.trim()
+        const toppings = this.state.selectedToppings
+        const i = this.state.updateId
+        const curr = this.state.pizzas[i]
+        const id = curr.name
+       
+        updatePizza(id, {name: name, toppings: toppings}).then(async response => {
+           console.log(response)
+            
+            if (response.ok) {
+                const snack = {open: true, severity: "success", message: "pizza update" }
+
+                let pizzas = this.state.pizzas
+                pizzas[i] = {name: name, toppings: toppings}
+                this.sortList(pizzas)
+                this.setState({pizzas: pizzas, snack: snack})
+            } else {
+                const snack = {open: true, severity: "error", message: response.status + " update failed " + response.statusText}
+                this.setState({pizzas: this.state.pizzas, snack: snack})
+            }
+
+        }).catch(e => {
+            const snack = {open: true, severity: "error", message: "update topping failed " + e.toString() }
+            this.setState({pizzas: this.state.pizzas, snack: snack})
+        });
+
+        this.setState({openEdit: false})
+    }
+
     addTopping = (e) => {
         const name = document.getElementById("nameToppingAdd").value.trim()
        
@@ -288,20 +382,48 @@ class App extends Component {
         this.setState({openToppingAdd: false})
     }
 
+    updateTopping = (e) => {
+        const name = document.getElementById("nameToppingEdit").value.trim()
+        const i = this.state.updateId
+        const id = this.state.toppings[i]
+       
+       updateTopping(id, {name: name}).then(async response => {
+           console.log(response)
+            
+            if (response.ok) {
+                const snack = {open: true, severity: "success", message: "topping updated" }
+
+                let toppings = this.state.toppings
+                toppings[i] = name
+                toppings.sort()
+                this.setState({toppings: toppings, snack: snack})
+            } else {
+                const snack = {open: true, severity: "error", message: response.status + " update failed " + response.statusText}
+                this.setState({toppings: this.state.toppings, snack: snack})
+            }
+
+        }).catch(e => {
+            const snack = {open: true, severity: "error", message: "update topping failed " + e.toString() }
+            this.setState({toppings: this.state.toppings, snack: snack})
+        });
+
+        this.setState({openToppingEdit: false})
+    }
+
     handleClose = () => {
         if (this.state.value === 0) {
-            this.setState({selectedToppings: []})
-            this.setState({open: false})
+            this.setState({open: false, openEdit: false})
         } else {
-            this.setState({openToppingAdd: false})
-        }
+            this.setState({openToppingAdd: false, openToppingEdit: false})
+        }  
         
-    };
+        this.setState({updateId: -1, selectedToppings: []})
+    }
 
    
     handleChange = (e) => {
        
-    };
+    }
 
     handleSnackClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -311,7 +433,7 @@ class App extends Component {
         let snack = this.state.snack
         snack.open = false
         this.setState({snack: snack})
-    };
+    }
 
     renderRow = (props) => {
         const { index, style } = props;
@@ -330,7 +452,7 @@ class App extends Component {
                 </Tooltip>
 
             </ListItem>
-        );
+        )
     }
 
     renderRowToppings = (props) => {
@@ -395,6 +517,14 @@ class App extends Component {
             this.setState({value: newValue})
         };
 
+        const itemKey = (i) => {
+            if (this.state.value === 0) {
+                return this.state.pizzas[i].name
+            }
+
+            return this.state.toppings[i]
+        }
+
       return (
         <div className={classes.root}>
         <Grid container >
@@ -423,7 +553,9 @@ class App extends Component {
                         height={height - 125}
                         itemSize={70}
                         itemCount={this.state.pizzas.length}
-                        overscanCount={3}>
+                        overscanCount={3}
+                        itemKey={itemKey}
+                        >
 
                         {this.renderRow}
 
@@ -449,7 +581,9 @@ class App extends Component {
                         height={height - 125}
                         itemSize={70}
                         itemCount={this.state.toppings.length}
-                        overscanCount={3}>
+                        overscanCount={3}
+                        itemKey={itemKey}
+                        >
 
                         {this.renderRowToppings}
 
@@ -467,6 +601,8 @@ class App extends Component {
 
                 <SimpleDialog onAdd={this.addPizza} onClose={this.handleClose} onRemoveSelect={this.onRemoveSelectHandler} open={this.state.open} options={this.state.toppings} selectedValues={this.state.selectedToppings} />
                 <SimpleDialogTopping onAdd={this.addTopping} onClose={this.handleClose} open={this.state.openToppingAdd} />
+                <SimpleDialogEditTopping onAdd={this.updateTopping} onClose={this.handleClose} open={this.state.openToppingEdit} id={this.state.updateId} />
+                <SimpleDialogEditPizza onAdd={this.updatePizza} onClose={this.handleClose} id={this.state.updateId} onRemoveSelect={this.onRemoveSelectHandler} open={this.state.openEdit} options={this.state.toppings} selectedValues={this.state.selectedToppings} />
             </Grid>
         </Grid>
         <Snackbar open={this.state.snack.open} autoHideDuration={4000} onClose={this.handleSnackClose}>

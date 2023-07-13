@@ -7,9 +7,10 @@
   },
   "main": "index.js",
   "scripts": {
+    "bootrun": "cd web&&npm install --force&&npm run build&&cd ..&&npm install --force&&node -e \"bootstrap=require('./bootstrap'); bootstrap()\"&&node index",
     "bootstrap": "node -e \"bootstrap=require('./bootstrap'); bootstrap()\"",
-    "build": "cd web&&npm install --force&&npm run build",
-    "buildstart": "cd web&&npm install --force&&npm run build&&cd ..&&node index",
+    "buildServer": "cd web&&npm install --force&&npm run build&&cd ..&&npm install --force",
+    "buildstart": "npm run build&&node index",
     "start": "node index",
     "test": "npx mocha --bail --recursive test/",
     "testPure": "mocha --bail --recursive test/"
@@ -34,7 +35,7 @@
   "strongmind": {
     "apiVersion": "1",
     "host": "0.0.0.0",
-    "port": 3001,
+    "port": 8080,
     "loggerMaxBodyLength": 100
   },
   "jshintConfig": {

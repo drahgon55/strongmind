@@ -11,7 +11,7 @@ node_modules
 
 localOnly
 tests
-config.json
+
 configTest.json
 clientConfig.json
 gcloud_key.json
